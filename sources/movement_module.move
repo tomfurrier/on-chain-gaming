@@ -36,7 +36,7 @@ module origin_byte_game::movement_module {
         if (y > 1){
             self.y = self.y + 1;
         };
-        if (x < 1 && self.x > 0){
+        if (y < 1 && self.y > 0){
             self.y = self.y - 1;
         };
 
