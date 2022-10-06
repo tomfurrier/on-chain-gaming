@@ -3,7 +3,7 @@ module origin_byte_game::movement2_module {
     use sui::transfer;
     use sui::tx_context::{Self, TxContext};
     
-    const SIGNED_OFFSET : u64 = 10000000000;
+    const SIGNED_OFFSET : u64 = 10000000;
 
     struct Vector2 has copy, store, drop {
         x: u64,
