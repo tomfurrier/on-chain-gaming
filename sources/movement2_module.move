@@ -15,13 +15,15 @@ module origin_byte_game::movement2_module {
         position: Vector2,
         velocity: Vector2,
         // used to reject out of order updates
-        sequenceNum: u64
+        sequenceNum: u64,
+        isExploded: bool
     }
 
     struct PlayerStateUpdatedEvent has copy, drop {
         position: Vector2,
         velocity: Vector2,
-        sequenceNum: u64
+        sequenceNum: u64,
+        isExploded : bool
     }
 
     public entry fun create_playerstate_for_sender(ctx: &mut TxContext) {
@@ -35,7 +37,8 @@ module origin_byte_game::movement2_module {
                 x: SIGNED_OFFSET,
                 y: SIGNED_OFFSET
             },
-            sequenceNum: 0
+            sequenceNum: 0,
+            isExploded: false
         };
         transfer::transfer(state, tx_context::sender(ctx));
     }
@@ -48,11 +51,12 @@ module origin_byte_game::movement2_module {
         self.velocity.x = SIGNED_OFFSET;
         self.velocity.y = SIGNED_OFFSET;
         self.sequenceNum = 0;
+        self.isExploded = false;
 
-        event::emit(PlayerStateUpdatedEvent { position: self.position, velocity: self.velocity, sequenceNum: self.sequenceNum })
+        event::emit(PlayerStateUpdatedEvent { position: self.position, velocity: self.velocity, sequenceNum: self.sequenceNum, isExploded: self.isExploded })
     }
 
-    public entry fun do_update(self: &mut PlayerState, posX: u64, posY: u64, velX: u64, velY: u64, sequenceNum: u64) {
+    public entry fun do_update(self: &mut PlayerState, posX: u64, posY: u64, velX: u64, velY: u64, sequenceNum: u64, isExploded: bool) {
         use sui::event;
         
         if (sequenceNum > self.sequenceNum) {     
@@ -61,8 +65,9 @@ module origin_byte_game::movement2_module {
             self.velocity.x = velX;
             self.velocity.y = velY;
             self.sequenceNum = sequenceNum;
+            self.isExploded = isExploded;
 
-            event::emit(PlayerStateUpdatedEvent { position: self.position, velocity: self.velocity, sequenceNum: self.sequenceNum})
+            event::emit(PlayerStateUpdatedEvent { position: self.position, velocity: self.velocity, sequenceNum: self.sequenceNum, isExploded: self.isExploded })
         };
     }
 }
