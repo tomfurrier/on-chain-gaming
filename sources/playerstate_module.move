@@ -71,11 +71,11 @@ module origin_byte_game::playerstate_module {
         transfer::transfer(state, tx_context::sender(ctx));
     }
 
-    public entry fun reset(self: &mut PlayerState, timestamp: u64) {
+    public entry fun reset(self: &mut PlayerState, posX: u64, posY: u64, timestamp: u64) {
         use sui::event;
       
-        self.position.x = SIGNED_OFFSET;
-        self.position.y = SIGNED_OFFSET;
+        self.position.x = posX;
+        self.position.y = posY;
         self.velocity.x = SIGNED_OFFSET;
         self.velocity.y = SIGNED_OFFSET;
         self.sequenceNum = 0;
